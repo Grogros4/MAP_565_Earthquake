@@ -21,15 +21,19 @@ if not os.path.exists('data'):
         
 #Download the data
 for year in range(start_year,end_year + 1):
+    # Splitting the year in 3 to prevent exceeding the limit of the number of rows returned
     print("Downloading data for year " + str(year))
-    url = "https://earthquake.usgs.gov/fdsnws/event/1/query.csv?starttime="+str(year)+"-01-01 00:00:00&endtime="+str(year)+"-06-30 23:59:59&minmagnitude=2.5&orderby=time"
+    url = "https://earthquake.usgs.gov/fdsnws/event/1/query.csv?starttime="+str(year)+"-01-01 00:00:00&endtime="+str(year)+"-04-30 23:59:59&minmagnitude=2.5&orderby=time"
     r = requests.get(url, allow_redirects=True)
     open('data/earthquake_' + str(year) + '_part1.csv', 'wb').write(r.content)
     
-    url = "https://earthquake.usgs.gov/fdsnws/event/1/query.csv?starttime="+str(year)+"-07-01 00:00:00&endtime="+str(year)+"-12-31 23:59:59&minmagnitude=2.5&orderby=time"
+    url = "https://earthquake.usgs.gov/fdsnws/event/1/query.csv?starttime="+str(year)+"-05-01 00:00:00&endtime="+str(year)+"-08-31 23:59:59&minmagnitude=2.5&orderby=time"
     r = requests.get(url, allow_redirects=True)
     open('data/earthquake_' + str(year) + '_part2.csv', 'wb').write(r.content)
     
+    url = "https://earthquake.usgs.gov/fdsnws/event/1/query.csv?starttime="+str(year)+"-09-01 00:00:00&endtime="+str(year)+"-12-31 23:59:59&minmagnitude=2.5&orderby=time"
+    r = requests.get(url, allow_redirects=True)
+    open('data/earthquake_' + str(year) + '_part3.csv', 'wb').write(r.content)
 
 # Merge the data
 print("Merging the data")
@@ -41,4 +45,4 @@ df = df.sort_values(by=['time'])
 
 print("Saving the data")
 # Save the file
-df.to_csv("earthquake_" + str(start_year) + "_" + str(end_year), index=False)    
+df.to_csv("earthquake_" + str(start_year) + "_" + str(end_year) + ".csv", index=False)    
